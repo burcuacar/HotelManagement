@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HotelManagement.Core.Entities
+{
+    public class Room
+    {
+        public int Id { get; set; }
+        public string RoomNumber { get; set; } = string.Empty;
+        public int RoomTypeId { get; set; }
+        public RoomType RoomType { get; set; } = null!;
+        public int HotelId { get; set; }
+        public Hotel Hotel { get; set; } = null!;
+    }
+}
