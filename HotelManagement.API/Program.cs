@@ -1,6 +1,9 @@
+using FluentValidation.AspNetCore;
+using HotelManagement.API.Middlewares;
 using HotelManagement.Data;
 using HotelManagement.Data.Repositories;
 using HotelManagement.Service;
+using HotelManagement.Service.Validators;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,11 +17,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<HotelManagementDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelManagementDb")));
-
+//Scoped Dependency Injection
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 
+//FluentValidation
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<Program>();
+    });
+
 var app = builder.Build();
+
+//Exception Middleware
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
