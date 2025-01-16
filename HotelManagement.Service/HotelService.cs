@@ -2,6 +2,7 @@
 using HotelManagement.Core.Entities;
 using HotelManagement.Data.Repositories;
 using HotelManagement.Service.DTOs.Hotel;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace HotelManagement.Service
     {
         private readonly IHotelRepository _hotelRepository;
         private readonly IMapper _mapper;
-        public HotelService(IHotelRepository hotelRepository, IMapper mapper)
+        private readonly ILogger<HotelService> _logger;
+        public HotelService(IHotelRepository hotelRepository, IMapper mapper, ILogger<HotelService> logger)
         {
             _hotelRepository = hotelRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task AddHotelAsync(CreateHotelDto createHotelDto)
@@ -37,6 +40,7 @@ namespace HotelManagement.Service
 
         public async Task<IEnumerable<HotelDto>> GetAllHotelsAsync()
         {
+            _logger.LogInformation("GetHotelsAsync method.");
             var hotels= await _hotelRepository.GetAllAsync();
             return _mapper.Map<List<HotelDto>>(hotels);
         }

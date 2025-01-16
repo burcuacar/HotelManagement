@@ -6,8 +6,18 @@ using HotelManagement.Service;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using HotelManagement.Service.MappingProfiles;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console() //Write logs to the console
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) //Daily file-based logging.
+    .CreateLogger();
+
+//Entegrate Serilog with ASP.NET Core
+builder.Host.UseSerilog();
 
 //AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
@@ -39,6 +49,9 @@ builder.Services.AddControllers()
     });
 
 var app = builder.Build();
+
+//Serilog
+app.UseSerilogRequestLogging(); //Log all HTTP requests
 
 //Exception Middleware
 app.UseMiddleware<ExceptionMiddleware>();

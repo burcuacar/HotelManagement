@@ -1,6 +1,7 @@
 ﻿using HotelManagement.Service;
 using HotelManagement.Service.DTOs.Hotel;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace HotelManagement.API.Controllers
 {
@@ -18,6 +19,7 @@ namespace HotelManagement.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
         {
+            Log.Information("GetHotels endpoint.");
             var hotels = await _hotelService.GetAllHotelsAsync();
             return Ok(hotels);
         }
