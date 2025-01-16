@@ -1,4 +1,5 @@
 ﻿using HotelManagement.Core.Entities;
+using HotelManagement.Service.DTOs.Hotel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace HotelManagement.Service
 {
     public interface IHotelService
     {
-        Task<IEnumerable<Hotel>> GetAllHotelsAsync();
-        Task<Hotel> GetHotelByIdAsync(int id);
-        Task AddHotelAsync(Hotel hotel);
-        Task UpdateHotelAsync(Hotel hotel);
+        Task<IEnumerable<HotelDto>> GetAllHotelsAsync();
+        Task<HotelDto> GetHotelByIdAsync(int id);
+        Task AddHotelAsync(CreateHotelDto hotel);
+        Task UpdateHotelAsync(UpdateHotelDto hotel);
         Task DeleteHotelAsync(int id);
     }
 }

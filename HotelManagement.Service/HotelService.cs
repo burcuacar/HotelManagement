@@ -1,5 +1,7 @@
-﻿using HotelManagement.Core.Entities;
+﻿using AutoMapper;
+using HotelManagement.Core.Entities;
 using HotelManagement.Data.Repositories;
+using HotelManagement.Service.DTOs.Hotel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,16 @@ namespace HotelManagement.Service
     public class HotelService : IHotelService
     {
         private readonly IHotelRepository _hotelRepository;
-        public HotelService(IHotelRepository hotelRepository)
+        private readonly IMapper _mapper;
+        public HotelService(IHotelRepository hotelRepository, IMapper mapper)
         {
             _hotelRepository = hotelRepository;
+            _mapper = mapper;
         }
 
-        public async Task AddHotelAsync(Hotel hotel)
+        public async Task AddHotelAsync(CreateHotelDto createHotelDto)
         {
+            var hotel=_mapper.Map<Hotel>(createHotelDto);
             await _hotelRepository.AddAsync(hotel);
         }
 
@@ -30,19 +35,22 @@ namespace HotelManagement.Service
             }
         }
 
-        public async Task<IEnumerable<Hotel>> GetAllHotelsAsync()
+        public async Task<IEnumerable<HotelDto>> GetAllHotelsAsync()
         {
-            return await _hotelRepository.GetAllAsync();
+            var hotels= await _hotelRepository.GetAllAsync();
+            return _mapper.Map<List<HotelDto>>(hotels);
         }
 
-        public async Task<Hotel> GetHotelByIdAsync(int id)
+        public async Task<HotelDto> GetHotelByIdAsync(int id)
         {
-            return await _hotelRepository.GetByIdAsync(id);
+            var hotel= await _hotelRepository.GetByIdAsync(id);
+            return _mapper.Map<HotelDto>(hotel);
         }
 
-        public async Task UpdateHotelAsync(Hotel hotel)
+        public async Task UpdateHotelAsync(UpdateHotelDto updateHotelDto)
         {
-            _hotelRepository.Update(hotel);
+            var hotel = _mapper.Map<Hotel>(updateHotelDto);
+            await _hotelRepository.Update(hotel);
         }
     }
 }

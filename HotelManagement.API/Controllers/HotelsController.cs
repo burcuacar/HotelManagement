@@ -1,9 +1,6 @@
-﻿using HotelManagement.Core.Entities;
-using HotelManagement.Data;
-using HotelManagement.Service;
-using Microsoft.AspNetCore.Http;
+﻿using HotelManagement.Service;
+using HotelManagement.Service.DTOs.Hotel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagement.API.Controllers
 {
@@ -19,14 +16,14 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
         {
-            var hotels= await _hotelService.GetAllHotelsAsync();
+            var hotels = await _hotelService.GetAllHotelsAsync();
             return Ok(hotels);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel(int id)
+        public async Task<ActionResult<HotelDto>> GetHotel(int id)
         {
             var hotel = await _hotelService.GetHotelByIdAsync(id);
 
@@ -39,31 +36,34 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
+        public async Task<ActionResult<HotelDto>> PostHotel([FromBody] CreateHotelDto createHotelDto)
         {
-            await _hotelService.AddHotelAsync(hotel);
-            return CreatedAtAction(nameof(GetHotel), new { id = hotel.Id }, hotel);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            await _hotelService.AddHotelAsync(createHotelDto);
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotel(int id, Hotel hotel)
+        public async Task<IActionResult> PutHotel(int id, [FromBody] UpdateHotelDto updateHotelDto)
         {
-            if (id != hotel.Id)
+            if (id != updateHotelDto.Id)
             {
-                return BadRequest();
+                return BadRequest("ID mismatch");
             }
 
-            await _hotelService.UpdateHotelAsync(hotel);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            await _hotelService.UpdateHotelAsync(updateHotelDto);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-           await _hotelService.DeleteHotelAsync(id);
+            await _hotelService.DeleteHotelAsync(id);
 
             return NoContent();
         }
-
     }
 }

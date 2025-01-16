@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using HotelManagement.Core.Entities;
 using HotelManagement.Data.Repositories;
 using HotelManagement.Service;
@@ -14,12 +15,13 @@ namespace HotelManagement.Tests.Services
     public class HotelServiceTests
     {
         private readonly Mock<IHotelRepository> _hotelRepositoryMock;
+        private readonly Mock<IMapper> _mapper;
         private readonly HotelService _hotelService;
 
         public HotelServiceTests()
         {
             _hotelRepositoryMock = new Mock<IHotelRepository>();
-            _hotelService = new HotelService(_hotelRepositoryMock.Object);
+            _hotelService = new HotelService(_hotelRepositoryMock.Object,_mapper.Object );
         }
 
         [Fact]

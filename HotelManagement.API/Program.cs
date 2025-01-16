@@ -3,10 +3,20 @@ using HotelManagement.API.Middlewares;
 using HotelManagement.Data;
 using HotelManagement.Data.Repositories;
 using HotelManagement.Service;
-using HotelManagement.Service.Validators;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using HotelManagement.Service.MappingProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//AutoMapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new HotelMappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 // Add services to the container.
 
