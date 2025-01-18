@@ -1,5 +1,6 @@
 ﻿using HotelManagement.Service;
 using HotelManagement.Service.DTOs.Hotel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -7,6 +8,7 @@ namespace HotelManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HotelsController : ControllerBase
     {
         private readonly IHotelService _hotelService;
