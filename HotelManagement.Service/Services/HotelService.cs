@@ -6,10 +6,12 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace HotelManagement.Service
+namespace HotelManagement.Service.Services
 {
     public class HotelService : IHotelService
     {
@@ -25,7 +27,7 @@ namespace HotelManagement.Service
 
         public async Task AddHotelAsync(CreateHotelDto createHotelDto)
         {
-            var hotel=_mapper.Map<Hotel>(createHotelDto);
+            var hotel = _mapper.Map<Hotel>(createHotelDto);
             await _hotelRepository.AddAsync(hotel);
         }
 
@@ -41,13 +43,13 @@ namespace HotelManagement.Service
         public async Task<IEnumerable<HotelDto>> GetAllHotelsAsync()
         {
             _logger.LogInformation("GetHotelsAsync method.");
-            var hotels= await _hotelRepository.GetAllAsync();
+            var hotels = await _hotelRepository.GetAllAsync();
             return _mapper.Map<List<HotelDto>>(hotels);
         }
 
         public async Task<HotelDto> GetHotelByIdAsync(int id)
         {
-            var hotel= await _hotelRepository.GetByIdAsync(id);
+            var hotel = await _hotelRepository.GetByIdAsync(id);
             return _mapper.Map<HotelDto>(hotel);
         }
 

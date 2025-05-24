@@ -1,5 +1,5 @@
-﻿using HotelManagement.Service;
-using HotelManagement.Service.DTOs.Hotel;
+﻿using HotelManagement.Service.DTOs.Hotel;
+using HotelManagement.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
