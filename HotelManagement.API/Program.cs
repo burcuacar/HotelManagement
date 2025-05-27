@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HotelManagement.Service.Services;
 using Microsoft.OpenApi.Models;
+using HotelManagement.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,9 +99,10 @@ builder.Services.AddControllers()
     {
         fv.RegisterValidatorsFromAssemblyContaining<Program>();
     });
-
+builder.Services.AddSignalR();
 var app = builder.Build();
-
+//Signal R 
+app.MapHub<ReservationHub>("/reservationHub");
 //Serilog
 app.UseSerilogRequestLogging(); //Log all HTTP requests
 

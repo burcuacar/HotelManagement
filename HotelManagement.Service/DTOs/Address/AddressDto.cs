@@ -8,11 +8,12 @@ namespace HotelManagement.Service.DTOs.Address
 {
     public class AddressDto
     {
-        public int Id { get; set; }
-        public string Street { get; set; } = string.Empty;
+        public int AddressId { get; set; }
+        public string AddressLine1 { get; set; } = string.Empty;
+        public string? AddressLine2 { get; set; }
         public string City { get; set; } = string.Empty;
-        public string State { get; set; } = string.Empty;
+        public string? State { get; set; }
         public string Country { get; set; } = string.Empty;
-        public string ZipCode { get; set; } = string.Empty;
+        public string? ZIP { get; set; }
     }
 }

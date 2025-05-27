@@ -31,6 +31,10 @@ namespace HotelManagement.Data.Repositories
         {
             return await _context.Set<T>().ToListAsync();
         }
+        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        {
+            return _context.Set<T>().AsQueryable(); // Paging/sorting için 
+        }
 
         public async Task<T> GetByIdAsync(int id)
         {

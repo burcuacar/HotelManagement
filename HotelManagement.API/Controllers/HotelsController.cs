@@ -1,4 +1,5 @@
 ﻿using HotelManagement.Service.DTOs.Hotel;
+using HotelManagement.Service.DTOs.QueryParameters;
 using HotelManagement.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,10 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels([FromQuery] HotelQueryParameters queryParameters)
         {
             Log.Information("GetHotels endpoint.");
-            var hotels = await _hotelService.GetAllHotelsAsync();
+            var hotels = await _hotelService.GetAllHotelsAsync(queryParameters);
             return Ok(hotels);
         }
 
@@ -51,7 +52,7 @@ namespace HotelManagement.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, [FromBody] UpdateHotelDto updateHotelDto)
         {
-            if (id != updateHotelDto.Id)
+            if (id != updateHotelDto.HotelId)
             {
                 return BadRequest("ID mismatch");
             }

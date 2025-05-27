@@ -2,6 +2,8 @@
 using HotelManagement.Core.Entities;
 using HotelManagement.Data.Repositories;
 using HotelManagement.Service.DTOs.Hotel;
+using HotelManagement.Service.DTOs.QueryParameters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -40,10 +42,41 @@ namespace HotelManagement.Service.Services
             }
         }
 
-        public async Task<IEnumerable<HotelDto>> GetAllHotelsAsync()
+        public async Task<IEnumerable<HotelDto>> GetAllHotelsAsync(HotelQueryParameters queryParameters)
         {
             _logger.LogInformation("GetHotelsAsync method.");
-            var hotels = await _hotelRepository.GetAllAsync();
+            var query= _hotelRepository.GetAll();
+
+            //Optional filter
+            if (queryParameters.IsActive.HasValue)
+            {
+                query = query.Where(h => h.Status == queryParameters.IsActive);
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.SortBy))
+            {
+                switch (queryParameters.SortBy.ToLower())
+                {
+                    case "name":
+                        query=query.OrderBy(h => h.Name); break;
+                    case "city":
+                        query = query.OrderBy(h => h.Address.City); break;
+                    default:
+                        query = query.OrderBy(h => h.HotelId);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(h => h.HotelId);
+            }
+
+            //Pagination
+            query = query.Skip((queryParameters.PageNumber - 1) 
+                * queryParameters.PageSize)
+                .Take(queryParameters.PageSize);
+
+            var hotels = await query.ToListAsync();
             return _mapper.Map<List<HotelDto>>(hotels);
         }
 

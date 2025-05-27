@@ -13,8 +13,7 @@ namespace HotelManagement.Service.Validators
         public RoomValidator()
         {
             RuleFor(r => r.RoomNumber)
-                .NotEmpty().WithMessage("Room number is required.")
-                .Length(1, 10).WithMessage("Room number must be between 1 and 10 characters.");
+                .NotEmpty().WithMessage("Room number is required.");
 
             RuleFor(r => r.RoomTypeId)
                 .GreaterThan(0).WithMessage("A valid RoomTypeId is required.");
